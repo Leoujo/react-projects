@@ -8,55 +8,36 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditTodoDialog from "./EditDialog";
+import { Paper } from "@mui/material";
+import EditTodoDialog from "./EditTodoDialog";
 
-export default function CheckboxList({ todo, deleteTodo, editTodo, editTodoCheck }) {
+export default function TodoItem({ todo, deleteTodo, editTodo }) {
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [deleteColor, setDeleteColor] = React.useState("gray");
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const dialogHandler = () => {
+    setOpenDialog(!openDialog);
   };
 
-  const handleOpenDialog = (todo) => {
-    setOpenDialog(true);
-  };
-
-  const editTodoHandler = (newText) => {
-    editTodo(newText, todo.id);
-    handleCloseDialog();
-  };
   return (
     <>
-      <EditTodoDialog pickedTodo={todo} open={openDialog} handleClose={handleCloseDialog} editTodoHandler={editTodoHandler} />
-
-      <List sx={{ bgcolor: "background.paper", marginTop: "1em" }}>
+      <EditTodoDialog editTodo={editTodo} open={openDialog} dialogHandler={dialogHandler} todo={todo} />
+      <Paper style={{ padding: "0.5em 0em" }}>
         <ListItem
           secondaryAction={
-            <IconButton
-              edge="end"
-              aria-label="comments"
-              onClick={() => deleteTodo(todo.id)}
-              onMouseEnter={() => {
-                setDeleteColor("#1976d2");
-              }}
-              onMouseLeave={() => {
-                setDeleteColor("gray");
-              }}
-            >
-              <DeleteIcon style={{ color: deleteColor }} />
+            <IconButton edge="end" aria-label="delete" onClick={() => deleteTodo(todo.id)}>
+              <DeleteIcon />
             </IconButton>
           }
           disablePadding
         >
-          <ListItemButton role={undefined} /*onClick={handleToggle(value)}*/ dense>
+          <ListItemButton role={undefined} dense>
             <ListItemIcon>
-              <Checkbox edge="start" checked={todo.checked} onClick={() => editTodoCheck(true, todo.id)} />
+              <Checkbox edge="start" tabIndex={-1} disableRipple />
             </ListItemIcon>
-            <ListItemText primary={todo.text} style={{ color: todo.checked ? "gray" : "black" }} onClick={handleOpenDialog} />
+            <ListItemText primary={todo.text} onClick={() => setOpenDialog(true)} />
           </ListItemButton>
         </ListItem>
-      </List>
+      </Paper>
     </>
   );
 }
