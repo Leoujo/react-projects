@@ -13,14 +13,24 @@ import EditTodoDialog from "./EditTodoDialog";
 
 export default function TodoItem({ todo, deleteTodo, editTodo }) {
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [isChecked, setIsChecked] = React.useState(false);
 
   const dialogHandler = () => {
     setOpenDialog(!openDialog);
   };
 
+  const checkedHandler = () => {
+    setIsChecked(!isChecked);
+  };
+
   return (
     <>
-      <EditTodoDialog editTodo={editTodo} open={openDialog} dialogHandler={dialogHandler} todo={todo} />
+      <EditTodoDialog
+        editTodo={editTodo}
+        open={openDialog}
+        dialogHandler={dialogHandler}
+        todo={todo}
+      />
       <Paper style={{ padding: "0.5em 0em" }}>
         <ListItem
           secondaryAction={
@@ -32,9 +42,13 @@ export default function TodoItem({ todo, deleteTodo, editTodo }) {
         >
           <ListItemButton role={undefined} dense>
             <ListItemIcon>
-              <Checkbox edge="start" tabIndex={-1} disableRipple />
+              <Checkbox edge="start" tabIndex={-1} disableRipple onClick={checkedHandler} />
             </ListItemIcon>
-            <ListItemText primary={todo.text} onClick={() => setOpenDialog(true)} />
+            <ListItemText
+              style={{ textDecoration: isChecked ? "line-through" : null }}
+              primary={todo.text}
+              onClick={() => setOpenDialog(true)}
+            />
           </ListItemButton>
         </ListItem>
       </Paper>
