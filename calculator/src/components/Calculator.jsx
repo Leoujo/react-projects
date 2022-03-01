@@ -8,52 +8,56 @@ export default function Calculator() {
   const [oldnum, setOldNum] = useState(0);
   const [operator, setOperator] = useState();
 
-  function inputNum(e) {
+  const inputNum = (e) => {
     var input = e.target.value;
     if (num === 0) {
       setNum(input);
     } else {
       setNum(num + input);
     }
-  }
+  };
 
-  function clear() {
+  const clear = () => {
     setNum(0);
-  }
+  };
 
-  function porcentage() {
+  const porcentage = () => {
     setNum(num / 100);
-  }
+  };
 
-  function changeSign() {
+  const changeSign = () => {
     if (num > 0) {
       setNum(-num);
     } else {
       setNum(Math.abs(num));
     }
-  }
+  };
 
-  function operatorHandler(e) {
+  const operatorHandler = (e) => {
     var operatorInput = e.target.value;
     setOperator(operatorInput);
     setOldNum(num);
     setNum(0);
-  }
+  };
 
-  function calculate() {
+  const calculate = () => {
+    const oldNumNumber = parseFloat(oldnum.replace(",", "."));
+    const numNumber = parseFloat(num.replace(",", "."));
+
     if (operator === "/") {
-      setNum(parseFloat(oldnum) / parseFloat(num));
+      setNum((oldNumNumber / numNumber).toLocaleString("pt-BR"));
+      //setNum(parseFloat(oldnum) / parseFloat(num));
     } else if (operator === "X") {
-      setNum(parseFloat(oldnum) * parseFloat(num));
+      setNum((oldNumNumber * numNumber).toLocaleString("pt-BR"));
+      //setNum(parseFloat(oldnum) * parseFloat(num));
     } else if (operator === "-") {
-        console.log(oldnum)
-        console.log(num)
-        console.log(oldnum-num)
-      setNum(parseFloat(oldnum) - parseFloat(num));
+      setNum((oldNumNumber - numNumber).toLocaleString("pt-BR"));
+      //setNum(parseFloat(oldnum) - parseFloat(num));
     } else if (operator === "+") {
-      setNum(parseFloat(oldnum) + parseFloat(num));
+      setNum((oldNumNumber + numNumber).toLocaleString("pt-BR"));
+      //setNum(parseFloat(oldnum) + parseFloat(num));
     }
-  }
+  };
 
   return (
     <div>
@@ -62,9 +66,15 @@ export default function Calculator() {
         <div className="wrapper">
           <Box m={12} />
           <h1 className="result">{num}</h1>
-          <button onClick={clear}>AC</button>
-          <button onClick={changeSign}>+/-</button>
-          <button onClick={porcentage}>%</button>
+          <button onClick={clear} className="lighter-gray">
+            AC
+          </button>
+          <button onClick={changeSign} className="lighter-gray">
+            +/-
+          </button>
+          <button onClick={porcentage} className="lighter-gray">
+            %
+          </button>
           <button className="orange" onClick={operatorHandler} value="/">
             /
           </button>
@@ -104,13 +114,15 @@ export default function Calculator() {
           <button className="orange" onClick={operatorHandler} value="+">
             +
           </button>
-          <button className="gray" onClick={inputNum} value={0}>
+          <button
+            style={{ width: "6.6em", textAlign: "left", paddingLeft: "1em" }}
+            className="gray"
+            onClick={inputNum}
+            value={0}
+          >
             0
           </button>
-          <button className="gray" onClick={inputNum} value={"."}>
-            ,
-          </button>
-          <button className="gray" style={{ visibility: "hidden" }}>
+          <button className="gray" onClick={inputNum} value={","}>
             ,
           </button>
           <button className="orange" onClick={calculate}>
